@@ -1,0 +1,13 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.top {
+  height: 30px;
+}
+
+.menu {
+  height: 90%;
+}

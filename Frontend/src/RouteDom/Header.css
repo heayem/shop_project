@@ -1,0 +1,20 @@
+.mainLink {
+    /* width: 100%; */
+}
+
+.mainLink div {
+    margin-top: 10px;
+}
+
+.mainLink div .link {
+    margin-top: 30px;
+    width: 100%;
+    color: white;
+    text-decoration: none;
+}
+
+.logo {
+    font-size: 30px;
+    color: blue;
+
+}

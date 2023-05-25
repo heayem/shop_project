@@ -1,0 +1,82 @@
+.mainList {
+    width: 100%;
+    height: auto;
+    position: relative;
+
+}
+
+.pop {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.37);
+}
+
+.TopTable {
+    width: 100%;
+    font-size: 30px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    border: 1px solid;
+    border-collapse: collapse;
+    background-color: #04AA6D;
+}
+
+.mainList .TopTable .IconCreate {
+    color: whitesmoke;
+    cursor: pointer;
+    margin: 0px 5px;
+}
+
+.mainList .TopTable input,
+select {
+    margin: 0px 5px;
+    border-radius: 5px;
+    height: 30px;
+}
+
+.mainList .TopTable input:focus,
+section:focus {
+    outline: none;
+    /* box-shadow: 0 0 0 3px hsla(220, 100%, 50%, 80%); */
+    box-shadow: 0 0 0 3px #eee;
+}
+
+.mainList .TopTable .IconCreate:hover {
+    color: rgba(245, 245, 245, 0.479);
+}
+
+.Table table {
+    width: 100%;
+    margin: auto;
+    border: 1px solid;
+    border-collapse: collapse;
+}
+
+.Table table thead tr th {
+    border: 1px solid gray;
+    padding: 8px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #04AA6D;
+    color: white;
+}
+
+.Table table tbody tr td {
+    text-align: center;
+    border: 1px solid gray;
+
+}
+
+.Table table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.Table table tbody tr:hover {
+    background-color: #ddd;
+}
