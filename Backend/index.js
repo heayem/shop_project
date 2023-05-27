@@ -15,6 +15,7 @@ require("./src/Route/OrderProduct.Route")(app)
 require("./src/Route/auth.Route")(app)
 require("./src/Route/role.route")(app)
 require("./src/Route/user_role.Route")(app)
+require("./src/Route/cart.route")(app)
 
 // console.log(row.key)
 app.listen(port, () => {
