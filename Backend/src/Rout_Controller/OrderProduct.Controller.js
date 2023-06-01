@@ -114,22 +114,24 @@ const getAll_OrderProduct = (req, res) => {
 }
 
 const getOne_OrderProduct = (req, res) => {
-    let order_num = req.query.user_id
+    let cart_id = req.query.cart_id
+    let User_Id = req.query.user_id
+    let order_status = req.query.order_status
+
     var sql = "SELECT od.*,p.P_Name,u.User_Name FROM orderproduct od "
     sql += " INNER JOIN cart ON od.cart_id = cart.Id "
     sql += " INNER JOIN product p ON cart.Id = p.P_Id "
     sql += " INNER JOIN user u ON cart.User_Id = u.User_Id "
-    sql += " WHERE u.User_Id=?"
+    sql += " WHERE u.User_Id=? AND cart.Id=? AND od.order_status=?"
     // sql += " WHERE od.Order_Product_Id=?"
-    db.query(sql, [order_num], (err, row) => {
-        Row = row
+    db.query(sql, [User_Id, cart_id, order_status], (err, row) => {
         if (err) {
             res.json({
                 error: true,
                 message: err
             })
         } else {
-            if (row != 0) {
+            if (row.length > 0) {
                 res.json({
                     RecordNum: row.length,
                     list: row
@@ -148,7 +150,6 @@ const getOne_OrderProduct = (req, res) => {
     })
 
 }
-
 
 module.exports =
 {
