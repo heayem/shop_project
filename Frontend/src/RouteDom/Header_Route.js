@@ -20,6 +20,9 @@ const Header = () => {
                 <Link to='/user' className='link' ><p><Icon choose={'person-card'} /> User</p> </Link>
             </div>
             <div>
+                <Link to='/cart' className='link' ><p><Icon choose={'person-card'} /> Cart</p> </Link>
+            </div>
+            <div>
                 <Link to='/profile' className='link'><p><Icon choose={'profile'} /> profile </p></Link>
             </div>
         </div>

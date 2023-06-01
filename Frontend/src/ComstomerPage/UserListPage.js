@@ -190,7 +190,7 @@ const User = () => {
                     </div>
                     <hr class="my-0" />
                     <div className='col-12 table-responsive  overflow-auto m-0'>
-                        <table className='table text-dark text-left  font-weight-normal table-hover'>
+                        <table className='table text-dark text-center font-weight-normal table-hover'>
                             <thead>
                                 <tr>
                                     <th scope='col'> ID</th>
@@ -270,11 +270,10 @@ const User = () => {
 
                                     }}
 
-                                    className='fs-2 text-info'
+                                    className='fs-3 text-info'
 
                                 />
                             </button>
-                            <p className='text-primary fs-4'>{Page}/{pageNum}</p>
                             <button
                                 onClick={() => {
                                     if (Page < pageNum) {
@@ -288,7 +287,7 @@ const User = () => {
                                 type='button' >
                                 <BsFillArrowRightSquareFill
 
-                                    className='fs-2 text-info ' />
+                                    className='fs-3 text-info ' />
                             </button>
 
 
@@ -471,97 +470,3 @@ const User = () => {
     )
 }
 export default User
-
-// <div className="mainList">
-// <div
-//     className={Popup === true ? "pop container" : ""}
-//     onClick={() => {
-//         setFrom(false)
-//         setpop(false)
-//     }}
-// >
-
-// </div>
-// {From === true ? <PopFrom /> : null}
-// <div className="TopTable">
-//     <MdCreateNewFolder className='IconCreate' onClick={() => {
-//         setFrom(!From)
-//         setpop(!Popup)
-//     }} />
-//     <BsFillArrowLeftSquareFill
-//         onClick={() => {
-//             if (Page > 1) {
-//                 setPage(Page - 1)
-//             }
-
-//         }}
-//         className='IconCreate'
-
-//     />
-//     <p>{Page}/{pageNum}</p>
-
-//     <BsFillArrowRightSquareFill
-//         onClick={() => {
-//             if (Page < pageNum) {
-//                 setPage(Page + 1)
-//             }
-//         }}
-//         className='IconCreate' />
-
-//     <input placeholder='Search' />
-// </div>
-// <div className="Table">
-//     <Table striped bordered hover>
-//         <thead>
-//             <tr>
-//                 <th> U.ID</th>
-//                 <th> U.Name</th>
-//                 <th> U.Email</th>
-//                 <th> U.Telephone</th>
-//                 <th> U.Status</th>
-//                 <th> U.Create_At</th>
-//                 <th> U.Time_LogIn</th>
-//                 <th> U.Time_LogOut</th>
-//                 <th> U.Action</th>
-
-//             </tr>
-//         </thead>
-//         {Data.map((item, index) => {
-//             return (
-//                 <tbody>
-
-//                     <tr key={index} >
-//                         <td>{item.User_Id}</td>
-//                         <td style={{ width: 200 }}>{item.User_Name}</td>
-//                         <td>{item.Email}</td>
-//                         <td >
-//                             {item.Tel}
-//                         </td>
-//                         <td>{item.Status === 1 ? "Active" : "Unactive"}</td>
-//                         <td>{item.Create_At}</td>
-//                         <td >{item.Time_LogIn}</td>
-//                         <td >{item.Time_LogOut}</td>
-//                         <td colSpan={2}>
-//                             {/* <Btn
-//                                 padding={1}
-//                                 fontSize={20}
-//                                 color={"blue"}
-//                                 boder={"none"}
-//                                 click={() => alert("Edit ")}
-//                                 value={<TbEdit />} />
-//                             <Btn
-//                                 padding={1}
-//                                 fontSize={20}
-//                                 color={"Red"}
-//                                 boder={"none"}
-//                                 click={() => alert("Delete")}
-//                                 value={<RiDeleteBin6Fill />} /> */}
-//                         </td>
-//                     </tr>
-//                 </tbody>
-//             )
-//         })}
-
-//     </Table>
-// </div>
-// </div>

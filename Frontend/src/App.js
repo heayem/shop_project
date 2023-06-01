@@ -7,6 +7,7 @@ import User from './ComstomerPage/UserListPage';
 import Product from './ComstomerPage/ProductList';
 import Header from './RouteDom/Header_Route';
 import Category from './ComstomerPage/Category';
+import Cart from './ComstomerPage/cartList'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Icon from './Component/Icon.compo';
@@ -71,6 +72,7 @@ function App() {
                           <Route path='/Product' element={<Product />} />
                           <Route path='/Category' element={<Category />} />
                           <Route path='/user' element={<User />} />
+                          <Route path='/cart' element={<Cart />} />
                           <Route path='/profile' element={<Profile />} />
                         </Routes>
                         : role_Page == 2 ?

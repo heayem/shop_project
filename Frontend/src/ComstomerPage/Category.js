@@ -252,11 +252,10 @@ const CategoryPage = () => {
 
                                     }}
 
-                                    className='fs-2 text-info'
+                                    className='fs-3 text-info'
 
                                 />
                             </button>
-                            <p className='text-primary fs-4'>{Page}/{pageNum}</p>
                             <button
                                 onClick={() => {
                                     if (Page < pageNum) {
@@ -270,7 +269,7 @@ const CategoryPage = () => {
                                 type='button' >
                                 <BsFillArrowRightSquareFill
 
-                                    className='fs-2 text-info ' />
+                                    className='fs-3 text-info ' />
                             </button>
 
 

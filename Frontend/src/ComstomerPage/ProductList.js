@@ -303,8 +303,8 @@ const Product = () => {
                                             <td>{item.P_Description}</td>
                                             <td style={{}}><Images
                                                 src={`http://localhost/Images/${item.Images}`}
-                                                width={100}
-                                                height={70}
+                                                width={50}
+                                                height={35}
                                             />
                                             </td>
                                             <td>{item.P_Status === 1 ?
@@ -364,11 +364,10 @@ const Product = () => {
 
                                     }}
 
-                                    className='fs-2 text-info'
+                                    className='fs-3 text-info'
 
                                 />
                             </button>
-                            <p className='text-primary fs-4'>{Page}/{pageNum}</p>
                             <button
                                 onClick={() => {
                                     if (Page < pageNum) {
@@ -380,7 +379,7 @@ const Product = () => {
                                 type='button' >
                                 <BsFillArrowRightSquareFill
 
-                                    className='fs-2 text-info ' />
+                                    className='fs-3 text-info ' />
                             </button>
 
 
