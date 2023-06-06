@@ -169,12 +169,10 @@ const User = () => {
                             <>
                                 <h1 className='text-danger'>User List </h1>
                                 <div className="input-group m-1 h-25 w-25">
-                                    <input type="text" className="form-control " placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2" />
-                                    <div className="input-group-append">
-                                        <button className="btn btn-outline-primary" type="button">
-                                            <Icon choose={'search'} />
-                                        </button>
-                                    </div>
+                                    <input type="text" className="form-control "
+                                        placeholder=" User name"
+                                        aria-label="Recipient's username" aria-describedby="basic-addon2" />
+
                                 </div>
                                 <div className="input-group m-1 h-25 w-25">
                                     <input type="datetime-local" className="form-control " />
@@ -205,47 +203,53 @@ const User = () => {
 
                                 </tr>
                             </thead>
-                            {Data.map((item, index) => {
-                                return (
-                                    <tbody>
 
-                                        <tr key={index} className='fs-6'>
-                                            <td>{index + 1}</td>
-                                            <td style={{ width: 200 }}>{item.User_Name}</td>
-                                            <td>{item.Email}</td>
-                                            <td >
-                                                {item.Tel}
-                                            </td>
-                                            <td>
-                                                {item.Status === 1 ?
-                                                    <Icon choose={'patch-check-yes'} color={'blue'} />
-                                                    : <Icon choose={'patch-check-no'} color={'red'} />
-                                                }
-                                            </td>
-                                            <td>{item.Create_At}</td>
-                                            <td >{item.Time_LogIn}</td>
-                                            <td >{item.Time_LogOut}</td>
-                                            <td colSpan={2}>
-                                                <TbEdit
-                                                    className='fs-5 text-primary m-1'
-                                                    type='button'
-                                                    onClick={() => {
-                                                        handleEdit(item)
-                                                        setEdit(true)
-                                                    }
-                                                    }
+                            {Data != null ?
+                                Data.map((item, index) => {
+                                    return (
+                                        <tbody>
 
-                                                />
-                                                <RiDeleteBin6Fill
-                                                    className='fs-5 text-danger m-1'
-                                                    type='button'
-                                                    onClick={() => handleDelete(item)}
-                                                />
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                )
-                            })}
+                                            <tr key={index} className='fs-6'>
+                                                <td>{index + 1}</td>
+                                                <td style={{ width: 200 }}>{item.User_Name}</td>
+                                                <td>{item.Email}</td>
+                                                <td >
+                                                    {item.Tel}
+                                                </td>
+                                                <td>
+                                                    {item.Status === 1 ?
+                                                        <Icon choose={'patch-check-yes'} color={'blue'} />
+                                                        : <Icon choose={'patch-check-no'} color={'red'} />
+                                                    }
+                                                </td>
+                                                <td>{item.Create_At}</td>
+                                                <td >{item.Time_LogIn}</td>
+                                                <td >{item.Time_LogOut}</td>
+                                                <td colSpan={2}>
+                                                    <TbEdit
+                                                        className='fs-5 text-primary m-1'
+                                                        type='button'
+                                                        onClick={() => {
+                                                            handleEdit(item)
+                                                            setEdit(true)
+                                                        }
+                                                        }
+
+                                                    />
+                                                    <RiDeleteBin6Fill
+                                                        className='fs-5 text-danger m-1'
+                                                        type='button'
+                                                        onClick={() => handleDelete(item)}
+                                                    />
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    )
+                                })
+                                :
+                                <p>No data available</p>
+                            }
 
                         </table>
                         <div className='col-12 d-flex flex-row m-0 p-0 justify-content-end '>

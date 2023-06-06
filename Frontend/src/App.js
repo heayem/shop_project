@@ -15,7 +15,7 @@ import './App.css';
 import { useState } from 'react';
 import Login from './Auth/auth';
 import Profile from './ComstomerPage/profile';
-
+import Navclient from './RouteDom/Header_Route_client';
 //client page
 import Home from './clientPage/homePage';
 
@@ -34,37 +34,61 @@ function App() {
 
       <div className=" row vh-100">
         <>
-          <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-            <div class="container-fluid">
 
-              <button
-                className="btn btn-outline-light text-dark"
-                type="button"
+          {login == 1 ?
+            <>
+              {role_Page == 1 ?
+                <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+                  <div class="container-fluid">
 
-                onClick={() => { login == 1 ? setMenu(!menu) : alert("Pleas login ") }}
+                    <button
+                      className="btn btn-outline-light text-dark"
+                      type="button"
 
-              >
-                <Icon choose={'menu'} />
-              </button>
+                      onClick={() => { login == 1 ? setMenu(!menu) : alert("Pleas login ") }}
 
-            </div>
-          </nav>
+                    >
+                      <Icon choose={'menu'} />
+                    </button>
+
+                  </div>
+                </nav>
+                :
+                null
+              }
+            </>
+            :
+            <>
+            </>
+          }
 
 
           <BrowserRouter>
             {
               login == 1 ?
                 <>
-                  <div className={menu === false ? 'd-none' : 'col-2 bg-dark text-light m-0 menu'}>
 
-                    <Header />
+                  <>
+                    {role_Page == 1 ?
+                      <div className={menu === false ? 'd-none' : 'col-2 bg-dark text-light m-0 menu'}>
+                        <Header />
+                      </div>
+                      :
 
-                  </div>
+                      <Navclient />
+                    }
+
+                  </>
+
+
+
                   <div className={
                     // d-flex flex-row m-auto justify-content-center
                     menu === true ? 'col-10 m-auto  p-0 m-0 menu  overflow-auto'
                       : 'col-11 m-auto p-0 m-0 menu  overflow-auto'
                   } >
+
+
                     {
                       role_Page == 1 ?
                         <Routes>

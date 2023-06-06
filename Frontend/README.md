@@ -1,3 +1,13 @@
+-total sale today
+    #SELECT pro.P_Name, AVG(odp.Grand_Total) Price_Total,SUM(cart.Quantity) Quantity_item FROM orderproduct odp INNER JOIN cart ON odp.cart_id = cart.Id INNER join product pro ON cart.Product_Id = pro.P_Id GROUP BY cart.Product_Id,cart.Create_at HAVING cart.Create_at = CURDATE();
+-total sale this month 
+    #SELECT pro.P_Name, AVG(odp.Grand_Total) Price_Total,SUM(cart.Quantity) Quantity_item FROM `orderproduct` odp INNER JOIN cart ON odp.cart_id = cart.Id INNER join product pro ON cart.Product_Id = pro.P_Id GROUP BY cart.Product_Id,cart.Create_at HAVING MONTH(cart.Create_at) = MONTH(now());
+-total sale per 
+    #SELECT pro.P_Name, AVG(odp.Grand_Total) Price_Total,SUM(cart.Quantity) Quantity_item FROM `orderproduct` odp INNER JOIN cart ON odp.cart_id = cart.Id INNER join product pro ON cart.Product_Id = pro.P_Id 
+    GROUP BY cart.Product_Id,cart.Create_at,MONTH(cart.Create_at)
+    HAVING Year(cart.Create_at) = YEAR(CURDATE());
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

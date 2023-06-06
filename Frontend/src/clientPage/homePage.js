@@ -1,8 +1,17 @@
-
-
+import {
+    Container,
+    Row,
+    Col
+} from "react-bootstrap"
 const Home = () => {
     return (
-        <><h1>Hello Client page </h1></>
+        <Container fluid bg="dark" variant="dark">
+            <Row>
+                {/* <Col bg="dark" sm md lg xl xxl> Hello </Col> */}
+                <Col> Hello </Col>
+            </Row>
+
+        </Container>
     )
 }
 

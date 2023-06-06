@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './userListPage.css'
 import { Col, Spinner } from 'react-bootstrap';
 import { request } from '../util/api';
+import ListGroup from 'react-bootstrap/ListGroup';
 
 const Cart = () => {
 
@@ -9,16 +10,18 @@ const Cart = () => {
     const [Cart, setCart] = useState([])
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState(true)
+    const [cart_id, setCart_id] = useState()
+    const [user_id, setUser_id] = useState()
 
     useEffect(() => {
         getList()
         getCart()
-    }, [])
+    }, [cart_id, user_id])
 
 
     const getList = () => {
         setLoading(true)
-        const urls = "orderprouct?user_id=1&cart_id=2&order_status=2"
+        const urls = "orderprouct?user_id=" + user_id + "&cart_id=" + cart_id + "&order_status=2"
         request("GET", urls, {}).then(res => {
             let data = res.data
             if (res.data.error === true) {
@@ -72,6 +75,11 @@ const Cart = () => {
             return false
         })
     }
+    const handleEdit = item => {
+        setCart_id(item.Id)
+        setUser_id(item.User_Id)
+
+    }
 
     return (
         <div className="Row h-100">
@@ -106,76 +114,80 @@ const Cart = () => {
                                 <div className='container'>
                                     <div className='row'>
                                         {
-                                            Cart.map((item, index) => {
-                                                return (
-                                                    <>
+                                            Cart != null ?
+                                                Cart.map((item, index) => {
+                                                    return (
+
                                                         <div className='col-12'>
-                                                            {item.Id}
+
+                                                            <ListGroup as="ol" numbered>
+                                                                <ListGroup.Item
+                                                                    as="li"
+                                                                    className="d-flex justify-content-between align-items-start"
+                                                                    onClick={() => handleEdit(item)}
+                                                                    type="button"
+                                                                >
+                                                                    <div className="ms-2 me-auto">
+                                                                        <div className="fw-bold"><p>User:{item.User_Name}</p></div>
+                                                                        <p>Product: {item.P_Name}</p>
+                                                                        <p>Quantity: {item.Quantity}</p>
+                                                                        <p>Date: {item.Create_at}</p>
+
+                                                                    </div>
+
+                                                                </ListGroup.Item>
+                                                            </ListGroup>
+
+
+
                                                         </div>
-                                                        <div className='col-12'>
-                                                            {item.User_Id}
-                                                        </div>
-                                                        <div className='col-12'>
-                                                            {item.Product_Id}
-                                                        </div>
-                                                        <div className='col-12'>
-                                                            {item.Quantity}
-                                                        </div>
-                                                        <div className='col-12'>
-                                                            {item.Create_at}
-                                                        </div>
-                                                    </>
+                                                    )
+                                                }
                                                 )
-                                            }
-                                            )
+                                                :
+                                                <p>No data available</p>
                                         }
-                                    </div>
+                                    </div >
                                 </div>
                             </div>
                             <div className='col-8'>
                                 <div className='container'>
                                     <div className='row'>
                                         {
-                                            Data.map((item, index) => {
-                                                return (
-                                                    <>
+                                            Data != null ?
+                                                Data.map((item, index) => {
+                                                    return (
                                                         <div className='col-12'>
-                                                            {item.Order_product_Id}
-                                                        </div>
-                                                        <div className='col-12'>
-                                                            {item.cart_id}
-                                                        </div>
-                                                        <div className='col-12'>
-                                                            {item.order_num}
-                                                        </div>
-                                                        <div className='col-12'>
-                                                            {item.P_Name}
-                                                        </div>
-                                                        <div className='col-12'>
-                                                            {item.Total}
-                                                        </div>
-                                                        <div className='col-12'>
-                                                            {item.Grand_Total}
-                                                        </div>
-                                                        <div className='col-12'>
-                                                            {item.order_status}
-                                                        </div>
-                                                        <div className='col-12'>
-                                                            {item.payment_id}
-                                                        </div>
-                                                        <div className='col-12'>
-                                                            {item.Description}
-                                                        </div>
-                                                        <div className='col-12'>
-                                                            {item.User_Name}
-                                                        </div>
-                                                        <div className='col-12'>
-                                                            {item.Date_Post}
-                                                        </div>
-                                                    </>
 
-                                                )
-                                            })
+                                                            <ListGroup as="ol" numbered>
+                                                                <ListGroup.Item
+                                                                    as="li"
+                                                                    className="d-flex justify-content-between align-items-start"
+                                                                >
+                                                                    <div className="ms-2 me-auto">
+                                                                        <div className="fw-bold"><p>order_num:{item.order_num}</p></div>
+                                                                        <p>cart_id: {item.cart_id}</p>
+                                                                        <p>P_Name: {item.P_Name}</p>
+                                                                        <p>order_num: {item.Total}</p>
+                                                                        <p>Total:{item.Grand_Total}</p>
+                                                                        <p>order_status:{item.order_status}</p>
+                                                                        <p>payment_id:{item.payment_id}</p>
+                                                                        <p>Description:{item.Description}</p>
+                                                                        <p>User_Name:{item.User_Name}</p>
+                                                                        <p>Date_Post:{item.Date_Post}</p>
+                                                                    </div>
+
+                                                                </ListGroup.Item>
+                                                            </ListGroup>
+
+
+                                                        </div>
+
+                                                    )
+                                                })
+                                                :
+                                                <p>No data available</p>
+
                                         }
                                     </div>
 

@@ -118,9 +118,9 @@ const getOne_OrderProduct = (req, res) => {
     let User_Id = req.query.user_id
     let order_status = req.query.order_status
 
-    var sql = "SELECT od.*,p.P_Name,u.User_Name FROM orderproduct od "
+    var sql = "SELECT od.*,p.P_Name,u.User_Name,DATE_FORMAT(od.Date_Post,'%d/%m/%Y %h:%i %p') AS Date_Post  FROM orderproduct od "
     sql += " INNER JOIN cart ON od.cart_id = cart.Id "
-    sql += " INNER JOIN product p ON cart.Id = p.P_Id "
+    sql += " INNER JOIN product p ON cart.Product_Id = p.P_Id "
     sql += " INNER JOIN user u ON cart.User_Id = u.User_Id "
     sql += " WHERE u.User_Id=? AND cart.Id=? AND od.order_status=?"
     // sql += " WHERE od.Order_Product_Id=?"

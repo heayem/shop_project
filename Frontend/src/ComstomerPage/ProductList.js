@@ -131,7 +131,7 @@ const Product = () => {
 
         }).then(res => {
             let data = res.data
-            setCategory(data.list)
+            setCategory(data?.list)
             setLoading(false)
         })
     }
@@ -161,7 +161,7 @@ const Product = () => {
         }).then(res => {
             let data = res.data
             setPageNum(data.pageNum)
-            setData(data.list)
+            setData(data?.list)
         })
     }
 
@@ -248,7 +248,7 @@ const Product = () => {
                                         setSearchName()
                                         setDate()
                                     }}>
-                                    {Category.map((item) => {
+                                    {Category != null ? Category.map((item) => {
                                         return (
                                             <option
                                                 value={item.C_Id}
@@ -257,7 +257,10 @@ const Product = () => {
                                             </option>
 
                                         )
-                                    })}
+                                    })
+                                        :
+                                        null
+                                    }
 
                                 </select>
 
@@ -292,9 +295,10 @@ const Product = () => {
                                     <th scope='col'> Action</th>
                                 </tr>
                             </thead>
-                            {Data.map((item, index) => {
+                            {Data != null ? Data.map((item, index) => {
                                 return (
                                     <tbody >
+
                                         <tr key={index} className='fs-6' >
                                             <td >{index + 1}</td>
                                             <td >{item.P_Name}</td>
@@ -331,9 +335,12 @@ const Product = () => {
 
                                             </td>
                                         </tr>
+
                                     </tbody>
                                 )
-                            })}
+                            }) :
+                                <p>No data available</p>
+                            }
                         </table>
 
                         <div className='col-12 d-flex flex-row m-0 p-0 justify-content-end '>
@@ -466,7 +473,7 @@ const Product = () => {
                                             <Form.Select
                                                 style={{ height: "40px" }}
                                                 size="sm"
-                                                onChange={(e) => setcategory(e.target.value)}
+                                                onClick={(e) => setcategory(e.target.value)}
                                             >
                                                 {Category.map((item) => {
                                                     return (

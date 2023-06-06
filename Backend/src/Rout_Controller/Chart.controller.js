@@ -45,51 +45,24 @@ const Create = (req, res) => {
     })
 }
 
-const GetAll = (req, res) => {
-    const page = req.query.page
-    let end = 4
-    let start = (page - 1) * end
-    if (!page) {
-        var sql = "SELECT c.*,p.P_Name,u.User_Name,DATE_FORMAT(c.Create_at,'%d/%m/%Y %h:%i %p') AS Create_at FROM cart c"
-            + " INNER JOIN user u ON u.User_Id = c.User_Id "
-            + " INNER JOIN product p ON c.Product_Id = p.P_Id"
-    } else {
-        sql = "SELECT c.*,p.P_Name,u.User_Name,DATE_FORMAT(c.Create_at,'%d/%m/%Y %h:%i %p') AS Create_at  FROM cart c"
-            + " INNER JOIN user u ON u.User_Id = c.User_Id "
-            + " INNER JOIN product p ON c.Product_Id = p.P_Id"
-            + " ORDER BY Id DESC LIMIT " + start + "," + end + " "
+const GetToday = (req, res) => {
 
-    }
-
-    db.query(sql, (err1, row) => {
-        if (err1) {
+    var sql = "SELECT pro.P_Name, AVG(odp.Grand_Total) Price_Total,SUM(cart.Quantity) Quantity_item,cart.Create_at"
+    sql += " FROM orderproduct odp "
+    sql += " INNER JOIN cart ON odp.cart_id = cart.Id"
+    sql += " INNER join product pro ON cart.Product_Id = pro.P_Id "
+    sql += " GROUP BY cart.Product_Id,cart.Create_at"
+    sql += " HAVING cart.Create_at = CURDATE()"
+    db.query(sql, (err, row) => {
+        if (err) {
             res.json({
                 error: true,
-                message: err1
+                message: err
             })
         } else {
-            db.query("SELECT count(Id) AS total FROM cart", (err, row1) => {
-                let total = row1[0].total
-                if (err) {
-                    res.json({
-                        error: true,
-                        message: err
-                    })
-                }
-                else {
-                    if (row != 0) {
-                        res.json({
-                            RecordNum: total,
-                            pageNum: Math.ceil(total / end),
-                            list: row
-                        })
-                    } else {
-                        res.json({
-                            message: "Not yet cart "
-                        })
-                    }
+            res.json({
 
-                }
+                list: row
             })
         }
     })
@@ -219,7 +192,7 @@ const Delete = (req, res) => {
 
 module.exports =
 {
-    GetAll,
+    GetToday,
     GetByone,
     GetByUer,
     Create,

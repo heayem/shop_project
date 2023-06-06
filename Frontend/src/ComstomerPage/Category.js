@@ -38,7 +38,7 @@ const CategoryPage = () => {
             method: "GET"
 
         }).then(res => {
-            let data = res.data
+            let data = res?.data
             if (data.error === true) {
                 setErr(data.message)
                 setMessage(true)
@@ -155,12 +155,9 @@ const CategoryPage = () => {
                             <>
                                 <h1 className='text-danger'>Category List</h1>
                                 <div className="input-group m-1 h-25 w-25">
-                                    <input type="text" className="form-control " placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2" />
-                                    <div className="input-group-append">
-                                        <button className="btn btn-outline-primary" type="button">
-                                            <Icon choose={'search'} />
-                                        </button>
-                                    </div>
+                                    <input type="text" className="form-control "
+                                        placeholder="Category name" aria-label="Recipient's username" aria-describedby="basic-addon2" />
+
                                 </div>
                                 <div className="input-group m-1 h-25 w-25">
                                     <input type="datetime-local" className="form-control " />
@@ -191,7 +188,7 @@ const CategoryPage = () => {
 
                                 </tr>
                             </thead>
-                            {Data.map((item, index) => {
+                            {Data != null ? Data.map((item, index) => {
                                 return (
                                     <tbody>
 
@@ -225,9 +222,13 @@ const CategoryPage = () => {
                                                 />
                                             </td>
                                         </tr>
+
                                     </tbody>
                                 )
-                            })}
+                            })
+                                :
+                                <p>No data available</p>
+                            }
 
                         </table>
                         <div className='col-12 d-flex flex-row m-0 p-0 justify-content-end '>
