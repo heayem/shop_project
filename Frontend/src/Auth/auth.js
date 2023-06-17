@@ -42,7 +42,6 @@ const Login = () => {
                 const role = res.data.role[0].Role_Id
                 localStorage.setItem("profile", JSON.stringify(profile))
                 localStorage.setItem("role", role)
-                // alert(role[0].Role_Id)
                 localStorage.setItem("login", 1)
                 clearForm()
                 window.location = ("/")

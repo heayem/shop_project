@@ -1,6 +1,6 @@
-import './profile.css'
+// import './profile.css'
 import { Col, Spinner } from 'react-bootstrap'
-import Icon from '../Component/Icon.compo'
+import Icon from '../../Component/Icon.compo'
 import {
     useNavigate
 } from "react-router-dom"
@@ -8,7 +8,7 @@ import { useEffect } from 'react'
 import axios from 'axios'
 
 
-const Profile = () => {
+const About = () => {
     const navigate = useNavigate()
     const profile = JSON.parse(localStorage.getItem("profile"))
     const loging = localStorage.getItem("login")
@@ -108,4 +108,4 @@ const Profile = () => {
 
     )
 }
-export default Profile
+export default About

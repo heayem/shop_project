@@ -10,6 +10,7 @@ import { MdCreateNewFolder } from 'react-icons/md';
 import Modal from 'react-bootstrap/Modal';
 import { Form, Button, Row, Col, Spinner } from 'react-bootstrap';
 import dayjs from 'dayjs';
+import Image from 'react-bootstrap/Image';
 
 
 
@@ -35,13 +36,15 @@ const Product = () => {
     const [show, setShow] = useState(false);
     const [err, setErr] = useState("");
     const [searchName, setSearchName] = useState()
-    // const [date, setDate] = useState(dayjs())
     const [date, setDate] = useState()
 
 
 
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        clearForm()
+        setShow(false)
+    };
     const handleShow = () => {
         setShow(true)
     };
@@ -107,6 +110,7 @@ const Product = () => {
             if (respone.error === true) {
                 console.log(respone.message)
                 setErr(respone.message)
+                setLoading(false)
             } else {
                 console.log(respone);
                 clearForm()
@@ -150,9 +154,6 @@ const Product = () => {
         if (Cate_Num && searchName) {
             urls = "http://localhost:8080/api/product?name=" + searchName + "&Category_Id=" + Cate_Num + ""
         }
-
-
-
         axios({
             url: urls,
             data: {},
@@ -164,14 +165,20 @@ const Product = () => {
             setData(data?.list)
         })
     }
+    // const onChangeImage = (event) => {
+    //     // setImgObjMulti(event.target.files)
+    //     setImg(event.target.files[0])// for past to api
+    //     // setImageFile(URL.createObjectURL(event.target.files[0])) // for preview
+    // }
 
     const handleEdit = e => {
-        // const image_Path = "http://localhost/Images/"
+        const image_Path = "http://localhost/Images/"
         setId(e.P_Id)
         setName(e.P_Name)
         setDescription(e.P_Description)
         setIsActive(e.isActive)
-        // setImg(image_Path + e.Images)//plz set location 
+        setImg(image_Path + e.Images)//plz set location 
+        // setImageFile(URL.createObjectURL(e.Images))
         setUserId(2)
         console.log(img)
         setPrice(e.P_Price)
@@ -304,7 +311,7 @@ const Product = () => {
                                             <td >{item.P_Name}</td>
                                             <td>{item.C_Name}</td>
                                             <td>{item.P_Price}$</td>
-                                            <td>{item.P_Description}</td>
+                                            <td>{item.P_Description.substr(0, 100) + "..."}</td>
                                             <td style={{}}><Images
                                                 src={`http://localhost/Images/${item.Images}`}
                                                 width={50}
@@ -439,7 +446,7 @@ const Product = () => {
                     >
                         <Modal.Header closeButton>
                             <Modal.Title>
-                                New products
+                                Product form
                             </Modal.Title>
                         </Modal.Header>
                         <Form onSubmit={handleSubmit}>
@@ -468,7 +475,6 @@ const Product = () => {
 
                                             />
                                         </Form.Group>
-
                                         <Form.Group className="mb-2" style={{ height: "40px" }} controlId="exampleForm.ControlInput1">
                                             <Form.Select
                                                 style={{ height: "40px" }}
@@ -483,15 +489,26 @@ const Product = () => {
 
                                             </Form.Select>
                                         </Form.Group>
-
-                                    </Col>
-                                    <Col className='mb-0'>
                                         <Form.Group controlId="formFile" className="mb-3">
                                             <Form.Control type="file"
 
                                                 onChange={(e) => setImg(e.target.files[0])}
                                             />
                                         </Form.Group>
+                                        <Form.Group>
+                                            <Row>
+                                                <Col xs={6} md={4}>
+                                                    {img != null ?
+                                                        <Image src={img} rounded />
+                                                        :
+                                                        <Image src={img} rounded />
+
+                                                    }
+                                                </Col>
+                                            </Row>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col className='mb-0'>
 
                                         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
 
@@ -520,7 +537,7 @@ const Product = () => {
                                                 as="textarea"
                                                 placeholder='Description '
                                                 type='text'
-                                                rows={3}
+                                                rows={10}
                                                 value={description}
                                                 onChange={(e) => setDescription(e.target.value)}
                                             />

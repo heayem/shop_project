@@ -39,8 +39,8 @@ const CreateOrderProduct = (req, res) => {
                 var Discount = body.Discount
                 var Grand_Total = Total - (Total * Number(Discount) / 100)
 
-                const sql = "INSERT INTO `orderproduct`(`Order_product_Id`,`cart_id`,`order_num`,`Total`,`Discount`,`Grand_Total`,`order_status`,`payment_id`,`Description`,`Date_Post`) VALUES(?,?,?,?,?,?,?,?,?,?)"
-                const paramet = [null, cart, body.order_num, Total, body.Discount, Grand_Total, body.order_status, body.payment_id, body.Description, new Date()]
+                const sql = "INSERT INTO `orderproduct`(`Order_product_Id`,`cart_id`,`Total`,`Discount`,`Grand_Total`,`order_status`,`payment_id`,`Description`,`Date_Post`) VALUES(?,?,?,?,?,?,?,?,?)"
+                const paramet = [null, cart, Total, body.Discount, Grand_Total, body.order_status, body.payment_id, body.Description, new Date()]
                 db.query(sql, paramet, (err, row) => {
                     if (err) {
                         res.json({
@@ -151,6 +151,86 @@ const getOne_OrderProduct = (req, res) => {
 
 }
 
+// update // i'm not yet modify it
+const update = (req, res) => {
+
+    let body = req.body
+    let message = {}
+    if (body.cart_id == "" || body.cart_id == null) {
+        message.cart_id = "plz input cart_id"
+    }
+    if (body.Discount == "" || body.Discount == null || body.Discount == undefined) {
+        message.Discount = "plz input Discount"
+    }
+    if (body.order_num == "" || body.order_num == null || body.order_num == undefined) {
+        message.order_num = "plz input order_num"
+    }
+    if (body.order_status == "" || body.order_status == null || body.order_status == undefined) {
+        message.order_status = "plz input order_status"
+    }
+    if (Object.keys(message) > 0) {
+        res.json({
+            error: true,
+            message: message
+        })
+        return false
+    }
+    var select = "SELECT cart.Id,cart.Quantity,product.P_Price FROM cart "
+    select += " INNER JOIN product ON cart.Product_Id = product.P_Id "
+    select += " WHERE cart.Id=?"
+    db.query(select, [body.cart_id], (err, result) => {
+
+        if (!err) {
+            if (result.length > 0) {
+                var cart = result[0].Id
+                var qty = result[0].Quantity
+                var price = result[0].P_Price
+                var Total = (qty * price)
+                var Discount = body.Discount
+                var Grand_Total = Total - (Total * Number(Discount) / 100)
+
+                const sql = "INSERT INTO `orderproduct`(`Order_product_Id`,`cart_id`,`Total`,`Discount`,`Grand_Total`,`order_status`,`payment_id`,`Description`,`Date_Post`) VALUES(?,?,?,?,?,?,?,?,?)"
+                const paramet = [null, cart, Total, body.Discount, Grand_Total, body.order_status, body.payment_id, body.Description, new Date()]
+                db.query(sql, paramet, (err, row) => {
+                    if (err) {
+                        res.json({
+                            error: true,
+                            message: err
+                        })
+                    }
+                    else {
+                        if (row.affectedRows > 0) {
+                            res.json({
+                                message: "Insert success!",
+                            })
+                        } else {
+                            res.json({
+                                message: "Insert no succes!",
+                            })
+                        }
+
+                    }
+
+                })
+            } else {
+                res.json({
+                    error: true,
+                    message: "cart not found"
+                })
+            }
+
+
+        } else {
+            res.json({
+                error: true,
+                message: "cart not found"
+            })
+        }
+
+    })
+
+
+}
 module.exports =
 {
     CreateOrderProduct,

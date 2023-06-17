@@ -1,5 +1,3 @@
-//import style 
-
 
 // import admin page
 import HomePage from './ComstomerPage/HomePage';
@@ -17,7 +15,14 @@ import Login from './Auth/auth';
 import Profile from './ComstomerPage/profile';
 import Navclient from './RouteDom/Header_Route_client';
 //client page
-import Home from './clientPage/homePage';
+import Home from './clientPage/Homepage/homePage';
+// import About from './clientPage/About/about';
+import Detail from './clientPage/product_Detail/product_detail';
+import CartShop from './clientPage/Cart/cart';
+import Productcategory from './clientPage/Category/Productcategory';
+
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 
 
@@ -25,8 +30,7 @@ function App() {
   const [menu, setMenu] = useState(false)
   const login = localStorage.getItem("login");
   const role_Page = localStorage.getItem("role");
-  // const role_Page = JSON.parse(localStorage.getItem("role"))
-  // alert(role_Page)
+
 
   return (
     <div className="container-fluid fst-italic lh-sm">
@@ -68,26 +72,19 @@ function App() {
               login == 1 ?
                 <>
 
-                  <>
-                    {role_Page == 1 ?
-                      <div className={menu === false ? 'd-none' : 'col-2 bg-dark text-light m-0 menu'}>
-                        <Header />
-                      </div>
-                      :
-
-                      <Navclient />
-                    }
-
-                  </>
-
-
+                  {role_Page == 1 ?
+                    <div className={menu === false ? 'd-none' : 'col-2 bg-dark shadow-lg text-light m-0 menu'}>
+                      <Header />
+                    </div>
+                    :
+                    <Navclient />
+                  }
 
                   <div className={
                     // d-flex flex-row m-auto justify-content-center
                     menu === true ? 'col-10 m-auto  p-0 m-0 menu  overflow-auto'
                       : 'col-11 m-auto p-0 m-0 menu  overflow-auto'
                   } >
-
 
                     {
                       role_Page == 1 ?
@@ -102,6 +99,10 @@ function App() {
                         : role_Page == 2 ?
                           <Routes>
                             <Route path='/' element={<Home />} />
+                            <Route path='/Productcategory/:id' element={<Productcategory />} />
+                            <Route path='/Profile' element={<Profile />} />
+                            <Route path='/CartShop' element={<CartShop />} />
+                            <Route path='/Detail/:id' element={<Detail />} />
                           </Routes>
                           :
                           <Routes>
@@ -113,10 +114,20 @@ function App() {
                   </div>
                 </>
                 :
-                <Routes>
-                  <Route path='/' element={<Login />} />
-                  <Route path='*' element={<Login />} />
-                </Routes>
+                <>
+                  <Navclient />
+                  <div className='col-11 m-auto p-0 m-0 menu  overflow-auto'>
+                    <Routes>
+                      <Route path='/' element={<Home />} />
+                      <Route path='/Detail/:id' element={<Detail />} />
+                      <Route path='/Productcategory/:id' element={<Productcategory />} />
+                      <Route path='/Profile' element={<Profile />} />
+                      <Route path='/CartShop' element={<CartShop />} />
+                      <Route path='/login' element={<Login />} />
+                      <Route path='*' element={<Login />} />
+                    </Routes>
+                  </div>
+                </>
             }
 
           </BrowserRouter>

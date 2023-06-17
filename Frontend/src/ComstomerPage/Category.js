@@ -6,7 +6,7 @@ import { RiDeleteBin6Fill } from 'react-icons/ri'
 import { TbEdit } from 'react-icons/tb'
 import Icon from '../Component/Icon.compo';
 import axios from 'axios';
-import { Form, Button, Image, Row, Col, Spinner, Modal, Alert } from 'react-bootstrap';
+import { Form, Button, Row, Col, Spinner, Modal } from 'react-bootstrap';
 
 
 const CategoryPage = () => {
