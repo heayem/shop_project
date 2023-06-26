@@ -32,6 +32,7 @@ const Home = () => {
     const [randomCartClient, setRandomCartClient] = useState()
     const [category, setCatgory] = useState()
 
+
     useEffect(() => {
         getCartSlide()
         randomCartClients()
@@ -74,6 +75,25 @@ const Home = () => {
             }
         })
     }
+    const getdata = (Item) => {
+
+        axios({
+            url: "http://localhost:8080/api/cart/create",
+            data: {
+                User_Id: 1,
+                Product_Id: Item.P_Id,
+                Qty: 1
+            },
+            method: "POST",
+
+        }).then(res => {
+            if (res.data.error === true) {
+                console.log(res.data.message)
+            }
+        })
+    }
+
+
     return (
         <>
 
@@ -230,9 +250,17 @@ const Home = () => {
                                                                     <MDBBtn color="primary" size="sm">
                                                                         Details
                                                                     </MDBBtn>
-                                                                    <MDBBtn outline color="primary" size="sm" className="mt-2">
+
+                                                                    <MDBBtn
+                                                                        outline color="primary"
+                                                                        size="sm"
+                                                                        className="mt-2"
+                                                                        onClick={() => {
+                                                                            getdata(item)
+                                                                        }}>
                                                                         Add to cart
                                                                     </MDBBtn>
+
                                                                 </div>
                                                             </MDBCol>
                                                         </MDBRow>

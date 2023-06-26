@@ -101,6 +101,7 @@ function App() {
                             <Route path='/' element={<Home />} />
                             <Route path='/Productcategory/:id' element={<Productcategory />} />
                             <Route path='/Profile' element={<Profile />} />
+                            <Route path='/CartShop/:P_Id' element={<CartShop />} />
                             <Route path='/CartShop' element={<CartShop />} />
                             <Route path='/Detail/:id' element={<Detail />} />
                           </Routes>
@@ -122,6 +123,7 @@ function App() {
                       <Route path='/Detail/:id' element={<Detail />} />
                       <Route path='/Productcategory/:id' element={<Productcategory />} />
                       <Route path='/Profile' element={<Profile />} />
+                      <Route path='/CartShop/:P_Id' element={<CartShop />} />
                       <Route path='/CartShop' element={<CartShop />} />
                       <Route path='/login' element={<Login />} />
                       <Route path='*' element={<Login />} />

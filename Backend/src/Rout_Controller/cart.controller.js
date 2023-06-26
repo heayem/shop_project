@@ -97,13 +97,14 @@ const GetAll = (req, res) => {
 
 }
 const GetByone = (req, res) => {
+    const id = req.params.P_Id
     if (!id) {
         res.json({
             error: true,
             message: "require id "
         })
     }
-    const { id } = req.params
+
     let = sql = "SELECT * FROM cart WHERE Id=?"
     db.query(sql, [id], (err, row) => {
         if (err) {
@@ -120,24 +121,47 @@ const GetByone = (req, res) => {
 
 }
 const GetByUer = (req, res) => {
-    const { id } = req.params
+    const id = req.params.User_Id
     if (!id) {
         res.json({
             error: true,
             message: "require user_id "
         })
     }
-    let = sql = "SELECT * FROM cart WHERE User_Id=?"
+    let sql = "SELECT c.*,p.P_Name,u.User_Name,p.P_Price,cate.C_Name,p.Images,DATE_FORMAT(c.Create_at,'%d/%m/%Y %h:%i %p') AS Create_at FROM cart c"
+        + " INNER JOIN user u ON u.User_Id = c.User_Id "
+        + " INNER JOIN product p ON c.Product_Id = p.P_Id "
+        + " INNER JOIN category cate ON cate.C_Id = p.Category_Id "
+        + " WHERE c.User_Id=?"
+
     db.query(sql, [id], (err, row) => {
+
         if (err) {
             res.json({
                 error: true,
                 message: err
             })
         } else {
-            res.json({
-                data: row
+            let sql1 = "SELECT SUM(p.P_Price * c.Quantity) AS total FROM cart c"
+                + " INNER JOIN user u ON u.User_Id = c.User_Id "
+                + " INNER JOIN product p ON c.Product_Id = p.P_Id "
+                + " INNER JOIN category cate ON cate.C_Id = p.Category_Id "
+                + " WHERE c.User_Id=?"
+            db.query(sql1, [id], (err1, row1) => {
+                var total = row1[0].total
+                if (!err1) {
+                    res.json({
+                        data: row,
+                        total: total
+                    })
+                } else {
+                    res.json({
+                        error: true,
+                        message: err
+                    })
+                }
             })
+
         }
     })
 

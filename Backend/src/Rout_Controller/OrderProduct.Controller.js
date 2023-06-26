@@ -6,12 +6,13 @@ const CreateOrderProduct = (req, res) => {
 
     let body = req.body
     let message = {}
-    if (body.cart_id == "" || body.cart_id == null) {
-        message.cart_id = "plz input cart_id"
+    if (body.User_Id == "" || body.User_Id == null) {
+        message.cart_id = "plz input User_Id"
     }
     if (body.Discount == "" || body.Discount == null || body.Discount == undefined) {
         message.Discount = "plz input Discount"
     }
+    //will delete this constrain . when i do it again 
     if (body.order_num == "" || body.order_num == null || body.order_num == undefined) {
         message.order_num = "plz input order_num"
     }
@@ -25,43 +26,47 @@ const CreateOrderProduct = (req, res) => {
         })
         return false
     }
-    var select = "SELECT cart.Id,cart.Quantity,product.P_Price FROM cart "
+
+    var select = "SELECT cart.User_Id,cart.Id,cart.Quantity, product.P_Id,product.P_Price FROM cart "
     select += " INNER JOIN product ON cart.Product_Id = product.P_Id "
-    select += " WHERE cart.Id=?"
-    db.query(select, [body.cart_id], (err, result) => {
+    select += " WHERE cart.User_Id=?"
+    db.query(select, [body.User_Id], (err, result) => {
 
         if (!err) {
             if (result.length > 0) {
-                var cart = result[0].Id
-                var qty = result[0].Quantity
-                var price = result[0].P_Price
-                var Total = (qty * price)
-                var Discount = body.Discount
-                var Grand_Total = Total - (Total * Number(Discount) / 100)
-
-                const sql = "INSERT INTO `orderproduct`(`Order_product_Id`,`cart_id`,`Total`,`Discount`,`Grand_Total`,`order_status`,`payment_id`,`Description`,`Date_Post`) VALUES(?,?,?,?,?,?,?,?,?)"
-                const paramet = [null, cart, Total, body.Discount, Grand_Total, body.order_status, body.payment_id, body.Description, new Date()]
-                db.query(sql, paramet, (err, row) => {
-                    if (err) {
-                        res.json({
-                            error: true,
-                            message: err
-                        })
-                    }
-                    else {
-                        if (row.affectedRows > 0) {
-                            res.json({
-                                message: "Insert success!",
-                            })
-                        } else {
-                            res.json({
-                                message: "Insert no succes!",
-                            })
+                var cart = result
+                var Is_Succes = 0
+                cart?.forEach(item => {
+                    var user_id = item.User_Id
+                    var P_Id = item.P_Id
+                    var qty = item.Quantity
+                    var price = item.P_Price
+                    var Total = (qty * price)
+                    var Discount = body.Discount
+                    var Grand_Total = Total - (Total * Number(Discount) / 100)
+                    const sql = "INSERT INTO `orderproduct`(`Order_product_Id`,`User_Id`,P_Id,`Total`,`Discount`,`Grand_Total`,`order_status`,`payment_id`,`Description`,`Date_Post`) VALUES(?,?,?,?,? ,?,?,?,?,?)"
+                    const paramet = [null, user_id, P_Id, Total, body.Discount, Grand_Total, body.order_status, body.payment_id, body.Description, new Date()]
+                    db.query(sql, paramet, (err, row) => {
+                        if (err) {
+                            Is_Succes = 1
                         }
-
-                    }
-
+                    })
                 })
+
+                if (Is_Succes == 0) {
+                    let = sql = "DELETE FROM cart WHERE User_Id=?"
+                    db.query(sql, [body.User_Id], (err, row) => { })
+                    res.json({
+                        message: "Inserted"
+                    })
+                } else if (Is_Succes == 1) {
+                    res.json({
+                        error: true,
+                        message: "Order not succes"
+                    })
+                }
+
+
             } else {
                 res.json({
                     error: true,
@@ -81,6 +86,88 @@ const CreateOrderProduct = (req, res) => {
 
 
 }
+
+// const CreateOrderProduct = (req, res) => {
+
+//     let body = req.body
+//     let message = {}
+//     if (body.cart_id == "" || body.cart_id == null) {
+//         message.cart_id = "plz input cart_id"
+//     }
+//     if (body.Discount == "" || body.Discount == null || body.Discount == undefined) {
+//         message.Discount = "plz input Discount"
+//     }
+//     //will delete this constrain . when i do it again 
+//     if (body.order_num == "" || body.order_num == null || body.order_num == undefined) {
+//         message.order_num = "plz input order_num"
+//     }
+//     if (body.order_status == "" || body.order_status == null || body.order_status == undefined) {
+//         message.order_status = "plz input order_status"
+//     }
+//     if (Object.keys(message) > 0) {
+//         res.json({
+//             error: true,
+//             message: message
+//         })
+//         return false
+//     }
+//     var select = "SELECT cart.Id,cart.Quantity,product.P_Price FROM cart "
+//     select += " INNER JOIN product ON cart.Product_Id = product.P_Id "
+//     select += " WHERE cart.Id=?"
+//     db.query(select, [body.cart_id], (err, result) => {
+
+//         if (!err) {
+//             if (result.length > 0) {
+//                 var cart = result[0].Id
+//                 var qty = result[0].Quantity
+//                 var price = result[0].P_Price
+//                 var Total = (qty * price)
+//                 var Discount = body.Discount
+//                 var Grand_Total = Total - (Total * Number(Discount) / 100)
+
+//                 const sql = "INSERT INTO `orderproduct`(`Order_product_Id`,`cart_id`,`Total`,`Discount`,`Grand_Total`,`order_status`,`payment_id`,`Description`,`Date_Post`) VALUES(?,?,?,?,?,?,?,?,?)"
+//                 const paramet = [null, cart, Total, body.Discount, Grand_Total, body.order_status, body.payment_id, body.Description, new Date()]
+//                 db.query(sql, paramet, (err, row) => {
+//                     if (err) {
+//                         res.json({
+//                             error: true,
+//                             message: err
+//                         })
+//                     }
+//                     else {
+//                         if (row.affectedRows > 0) {
+//                             res.json({
+//                                 message: "Insert success!",
+//                             })
+//                         } else {
+//                             res.json({
+//                                 message: "Insert no succes!",
+//                             })
+//                         }
+
+//                     }
+
+//                 })
+//             } else {
+//                 res.json({
+//                     error: true,
+//                     message: "cart not found"
+//                 })
+//             }
+
+
+//         } else {
+//             res.json({
+//                 error: true,
+//                 message: "cart not found"
+//             })
+//         }
+
+//     })
+
+
+// }
+
 
 
 const getAll_OrderProduct = (req, res) => {

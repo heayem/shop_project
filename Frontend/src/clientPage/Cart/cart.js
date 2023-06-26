@@ -20,9 +20,54 @@ import {
     MDBTooltip,
     MDBTypography,
 } from "mdb-react-ui-kit";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { request } from "../../util/api";
 
 
 const CartShop = () => {
+    const param = useParams()
+    const [message, setMessage] = useState()
+    const [cart, setCart] = useState()
+    const [Total, setTotal] = useState()
+    const [ItemTotal, setItemTotal] = useState()
+    const [Qty, setQty] = useState(2)
+
+    useEffect(() => {
+        getCart()
+
+    }, [])
+
+    const getCart = () => {
+        const url = "cart/getByUser/" + 1
+        request("GET", url, {}).then(res => {
+            let data = res.data
+            if (res.data.error === true) {
+                const err = res.data.message
+                if (err == {}) {
+                    for (const [key, value] of Object.entries(err)) {
+                        setMessage(`${value}`);
+                    }
+                } else {
+                    setMessage(err);
+
+                }
+            } else {
+                setCart(data.data)
+                setTotal(data.total)
+                setItemTotal(data.RecordNum)
+
+            }
+
+        }).catch(err => {
+            if (err.code == "ERR_NETWORK") {
+                alert("Can not connect to server. Plase contact administration!")
+                return false
+            }
+            return false
+        })
+    }
+
     return (
         <Container fluid>
             <Row >
@@ -35,121 +80,79 @@ const CartShop = () => {
                                     <MDBCard className="mb-4">
                                         <MDBCardHeader className="py-3">
                                             <MDBTypography tag="h5" className="mb-0">
-                                                Cart - 2 items
+                                                Cart - {ItemTotal} items
                                             </MDBTypography>
                                         </MDBCardHeader>
-
                                         <MDBCardBody>
-                                            <MDBRow>
+                                            {cart != null ?
+                                                cart?.map((item, index) => {
+                                                    return (
+                                                        <>
+                                                            {/* not yet join data for rander to client  */}
+                                                            <MDBRow key={index}>
+                                                                <MDBCol lg="3" md="12" className="mb-4 mb-lg-0">
+                                                                    <MDBRipple rippleTag="div" rippleColor="light"
+                                                                        className="bg-image rounded hover-zoom hover-overlay">
+                                                                        <img
+                                                                            src={`http://localhost/Images/${item.Images}`}
+                                                                            className="w-100" />
 
-                                                <MDBCol lg="3" md="12" className="mb-4 mb-lg-0">
-                                                    <MDBRipple rippleTag="div" rippleColor="light"
-                                                        className="bg-image rounded hover-zoom hover-overlay">
-                                                        <img
-                                                            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Vertical/12a.webp"
-                                                            className="w-100" />
-                                                        <a href="#!">
-                                                            <div className="mask" style={{ backgroundColor: "rgba(251, 251, 251, 0.2)", }}>
-                                                            </div>
-                                                        </a>
-                                                    </MDBRipple>
-                                                </MDBCol>
+                                                                    </MDBRipple>
+                                                                </MDBCol>
 
-                                                <MDBCol lg="5" md="6" className=" mb-4 mb-lg-0">
-                                                    <p>
-                                                        <strong>Blue denim shirt</strong>
-                                                    </p>
-                                                    <p>Color: blue</p>
-                                                    <p>Size: M</p>
+                                                                <MDBCol lg="5" md="6" className=" mb-4 mb-lg-0">
+                                                                    <p>
+                                                                        <strong>{item.P_Name}</strong>
+                                                                    </p>
+                                                                    <p>{item.C_Name}</p>
 
-                                                    <MDBTooltip wrapperProps={{ size: "sm" }} wrapperClass="me-1 mb-2"
-                                                        title="Remove item">
-                                                        <MDBIcon fas icon="trash" />
-                                                    </MDBTooltip>
 
-                                                    <MDBTooltip wrapperProps={{ size: "sm", color: "danger" }} wrapperClass="me-1 mb-2"
-                                                        title="Move to the wish list">
-                                                        <MDBIcon fas icon="heart" />
-                                                    </MDBTooltip>
-                                                </MDBCol>
+                                                                    <MDBTooltip wrapperProps={{ size: "sm" }} wrapperClass="me-1 mb-2"
+                                                                        title="Remove item">
+                                                                        <MDBIcon fas icon="trash" />
+                                                                    </MDBTooltip>
 
-                                                <MDBCol lg="4" md="6" className="mb-4 mb-lg-0">
-                                                    <div className="d-flex mb-4" style={{ maxWidth: "300px" }}>
-                                                        <MDBBtn className="px-3 me-2">
-                                                            <MDBIcon fas icon="minus" />
-                                                        </MDBBtn>
+                                                                    <MDBTooltip wrapperProps={{ size: "sm", color: "danger" }} wrapperClass="me-1 mb-2"
+                                                                        title="Move to the wish list">
+                                                                        <MDBIcon fas icon="heart" />
+                                                                    </MDBTooltip>
+                                                                </MDBCol>
 
-                                                        <MDBInput defaultValue={1} min={0} type="number" label="Quantity" />
+                                                                <MDBCol lg="4" md="6" className="mb-4 mb-lg-0">
+                                                                    <div className="d-flex mb-4" style={{ maxWidth: "300px" }}>
+                                                                        <MDBBtn className="px-3 me-2" onClick={() => Qty > 1 ? setQty(Qty - 1) : null}>
+                                                                            <MDBIcon fas icon="minus" />
+                                                                        </MDBBtn>
 
-                                                        <MDBBtn className="px-3 ms-2">
-                                                            <MDBIcon fas icon="plus" />
-                                                        </MDBBtn>
-                                                    </div>
+                                                                        <MDBInput value={Qty} min={1} readOnly type="number" label="Quantity" />
+                                                                        <MDBBtn className="px-3 ms-2" onClick={() => setQty(Qty + 1)}>
+                                                                            <MDBIcon fas icon="plus" />
+                                                                        </MDBBtn>
+                                                                    </div>
 
-                                                    <p className="text-start text-md-center">
-                                                        <strong>$17.99</strong>
-                                                    </p>
-                                                </MDBCol>
+                                                                    <p className="text-start text-md-center">
+                                                                        <strong>${(item.P_Price * item.Quantity)}</strong>
+                                                                    </p>
+                                                                </MDBCol>
 
-                                            </MDBRow>
+                                                            </MDBRow>
+                                                            <hr className="my-4" />
+                                                        </>
+                                                    )
 
-                                            <hr className="my-4" />
+                                                })
+                                                :
+                                                <>
+                                                </>
+                                            }
 
-                                            <MDBRow>
-
-                                                <MDBCol lg="3" md="12" className="mb-4 mb-lg-0">
-                                                    <MDBRipple rippleTag="div" rippleColor="light"
-                                                        className="bg-image rounded hover-zoom hover-overlay">
-                                                        <img
-                                                            src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Vertical/13a.webp"
-                                                            className="w-100" />
-                                                        <a href="#!">
-                                                            <div className="mask" style={{ backgroundColor: "rgba(251, 251, 251, 0.2)", }}>
-                                                            </div>
-                                                        </a>
-                                                    </MDBRipple>
-                                                </MDBCol>
-
-                                                <MDBCol lg="5" md="6" className=" mb-4 mb-lg-0">
-                                                    <p>
-                                                        <strong>Red hoodie</strong>
-                                                    </p>
-                                                    <p>Color: red</p>
-                                                    <p>Size: M</p>
-
-                                                    <MDBTooltip wrapperProps={{ size: "sm" }} wrapperClass="me-1 mb-2"
-                                                        title="Remove item">
-                                                        <MDBIcon fas icon="trash" />
-                                                    </MDBTooltip>
-
-                                                    <MDBTooltip wrapperProps={{ size: "sm", color: "danger" }} wrapperClass="me-1 mb-2"
-                                                        title="Move to the wish list">
-                                                        <MDBIcon fas icon="heart" />
-                                                    </MDBTooltip>
-                                                </MDBCol>
-
-                                                <MDBCol lg="4" md="6" className="mb-4 mb-lg-0">
-                                                    <div className="d-flex mb-4" style={{ maxWidth: "300px" }}>
-                                                        <MDBBtn className="px-3 me-2">
-                                                            <MDBIcon fas icon="minus" />
-                                                        </MDBBtn>
-
-                                                        <MDBInput defaultValue={1} min={0} type="number" label="Quantity" />
-
-                                                        <MDBBtn className="px-3 ms-2">
-                                                            <MDBIcon fas icon="plus" />
-                                                        </MDBBtn>
-                                                    </div>
-
-                                                    <p className="text-start text-md-center">
-                                                        <strong>$17.99</strong>
-                                                    </p>
-                                                </MDBCol>
-
-                                            </MDBRow>
                                         </MDBCardBody>
                                     </MDBCard>
 
+
+
+
+                                    {/* no product place */}
                                     <MDBCard className="mb-4">
                                         <MDBCardBody>
                                             <p>
@@ -179,6 +182,7 @@ const CartShop = () => {
                                         </MDBCardBody>
                                     </MDBCard>
                                 </MDBCol>
+
                                 <MDBCol md="4">
                                     <MDBCard className="mb-4">
                                         <MDBCardHeader>
@@ -191,7 +195,7 @@ const CartShop = () => {
                                                 <MDBListGroupItem
                                                     className="d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                                                     Products
-                                                    <span>$53.98</span>
+                                                    <span>${Total}</span>
                                                 </MDBListGroupItem>
                                                 <MDBListGroupItem className="d-flex justify-content-between align-items-center px-0">
                                                     Shipping
@@ -206,12 +210,12 @@ const CartShop = () => {
                                                         </strong>
                                                     </div>
                                                     <span>
-                                                        <strong>$53.98</strong>
+                                                        <strong>${Total}</strong>
                                                     </span>
                                                 </MDBListGroupItem>
                                             </MDBListGroup>
 
-                                            <MDBBtn block size="lg">
+                                            <MDBBtn block size="lg" onClick={() => alert("Ready do it just call api to use and don't forget user_id is importan")}>
                                                 Go to checkout
                                             </MDBBtn>
                                         </MDBCardBody>
