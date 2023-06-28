@@ -2,7 +2,6 @@
 const db = require('../db.configer/db.configer')
 const fs = require("fs")
 const upload = require("../Route/upload")
-const express = require("express")
 const CreateProduct = (req, res) => {
 
     let body = req.body
@@ -82,8 +81,29 @@ const CreateProduct = (req, res) => {
 
 const getOne_Product = (req, res) => {
     var param = req.params.P_Id
-    var sql = "SELECT * FROM product WHERE Category_Id=?"
+    var sql = "SELECT * FROM product WHERE Images IS NOT NULL AND Images != '' AND Category_Id=?"
     db.query(sql, [param], (err, row) => {
+        if (!err) {
+            res.json({
+                data: row
+            })
+        } else {
+            res.json({
+                error: true,
+                message: err
+            })
+        }
+    })
+
+}
+const getOne_Detail = (req, res) => {
+    var param = req.params.P_Id
+    var sql = " SELECT p.*,c.C_Name FROM product p "
+    sql += " INNER JOIN category c  ON c.C_Id = p.Category_Id "
+    sql += " WHERE p.Images IS NOT NULL AND p.Images != '' AND p.P_Id=?"
+    db.query(sql, [param], (err, row) => {
+
+        delete row[0].User_Id
         if (!err) {
             res.json({
                 data: row
@@ -447,6 +467,7 @@ module.exports =
     getAll_Product,
     getOne_Product,
     Update_Product,
+    getOne_Detail,
     Slide,
     randomCartClient,
     Delete_Product

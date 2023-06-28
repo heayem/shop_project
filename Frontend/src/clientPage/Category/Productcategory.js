@@ -71,7 +71,7 @@ const Productcategory = () => {
             <Row>
 
                 {products != null ? (
-                    products.map((item, index) => {
+                    products?.map((item, index) => {
                         if (item === null) {
                             return (
                                 <Col style={{ "height": "500px" }} sm={12} md={12} lg={12} xl={12} className='d-flex flex-row justify-content-center  align-items-center text-center'>

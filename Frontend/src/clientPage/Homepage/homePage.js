@@ -31,6 +31,7 @@ const Home = () => {
     const [cartSlide, setCartSlide] = useState()
     const [randomCartClient, setRandomCartClient] = useState()
     const [category, setCatgory] = useState()
+    const profile = JSON.parse(localStorage.getItem("profile"))
 
 
     useEffect(() => {
@@ -76,11 +77,10 @@ const Home = () => {
         })
     }
     const getdata = (Item) => {
-
         axios({
             url: "http://localhost:8080/api/cart/create",
             data: {
-                User_Id: 1,
+                User_Id: profile.User_Id,
                 Product_Id: Item.P_Id,
                 Qty: 1
             },
@@ -88,7 +88,7 @@ const Home = () => {
 
         }).then(res => {
             if (res.data.error === true) {
-                console.log(res.data.message)
+                alert(res.data.message)
             }
         })
     }
@@ -99,7 +99,7 @@ const Home = () => {
 
             <Container fluid>
                 <Row >
-                    <Col className="bg-white  mg-5 h-100 p-5" sm={12} md={12} lg={12} xl={12} >
+                    <Col className="mg-5 h-100 p-5" sm={12} md={12} lg={12} xl={12} >
                         <Row>
                             <Col sm={6} md={6} lg={6} xl={6} className=" bg-light shadow-1-strong p-0  mb-5  mt-5 ">
                                 <Col sm={12} md={12} lg={12} xl={12} className="bg-info shadow-1-strong m-0 " style={{ "height": "50px" }}>
@@ -149,7 +149,7 @@ const Home = () => {
             <Container fluid>
                 <div className=" d-flex flex-row overflow-x-scroll">
                     {cartSlide != null ?
-                        cartSlide.map((item, index) => {
+                        cartSlide?.map((item, index) => {
                             return (
                                 <Col key={index} style={{ "height": "400px" }} className="p-1" sm={6} md={6} lg={4} xl={3} >
                                     <MDBCard className="w-100 h-100 p-1 bg-light shadow-1-strong">
@@ -167,7 +167,7 @@ const Home = () => {
                                                 <span className="text-danger m-0 p-0">{item.P_Price} $ </span>
                                                 {item.P_Description.substr(0, 50) + "..."}
                                             </MDBCardText>
-                                            <MDBBtn href='#'>view detail</MDBBtn>
+                                            <Link to={'/Detail/' + item.P_Id}> <MDBBtn >view detail </MDBBtn></Link>
                                         </MDBCardBody>
 
                                     </MDBCard>
@@ -183,10 +183,10 @@ const Home = () => {
                     }
                 </div>
                 <Row>
-                    <Col xl={12} xs={12} sm={12} md={12} lg={12} className='bg-light text-center text-lg-start text-muted'  >
+                    <Col xl={12} xs={12} sm={12} md={12} lg={12} className=' text-center text-lg-start text-muted'  >
                         <MDBContainer fluid>
                             {randomCartClient != null ?
-                                randomCartClient.map((item, index) => {
+                                randomCartClient?.map((item, index) => {
                                     return (
                                         <MDBRow key={index} className="justify-content-center mb-0">
                                             <MDBCol md="12" xl="10">
@@ -247,10 +247,7 @@ const Home = () => {
                                                                 </div>
                                                                 <h6 className="text-success">Free shipping</h6>
                                                                 <div className="d-flex flex-column mt-4">
-                                                                    <MDBBtn color="primary" size="sm">
-                                                                        Details
-                                                                    </MDBBtn>
-
+                                                                    <Link className="w-100" to={'/Detail/' + item.P_Id}> <MDBBtn color="primary" className="w-100" size="sm" >view detail </MDBBtn></Link>
                                                                     <MDBBtn
                                                                         outline color="primary"
                                                                         size="sm"
@@ -282,7 +279,7 @@ const Home = () => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col className='bg-light text-center text-lg-start text-muted' xl={12} xs={12} sm={12} md={12} lg={12}>
+                    <Col className='bg-white text-center text-lg-start text-muted' xl={12} xs={12} sm={12} md={12} lg={12}>
                         <Footer />
                     </Col>
                 </Row>

@@ -12,7 +12,7 @@ import {
     MDBCol,
     MDBContainer,
     MDBIcon,
-    MDBInput,
+    // MDBInput,
     MDBListGroup,
     MDBListGroupItem,
     MDBRipple,
@@ -20,26 +20,29 @@ import {
     MDBTooltip,
     MDBTypography,
 } from "mdb-react-ui-kit";
-import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { request } from "../../util/api";
+import axios from "axios";
 
 
 const CartShop = () => {
-    const param = useParams()
     const [message, setMessage] = useState()
     const [cart, setCart] = useState()
     const [Total, setTotal] = useState()
     const [ItemTotal, setItemTotal] = useState()
-    const [Qty, setQty] = useState(2)
+    // const [User_Id, setUser_Id] = useState()
+    // const [Qty, setQty] = useState(2)
+    const profile = JSON.parse(localStorage.getItem("profile"))
 
     useEffect(() => {
         getCart()
-
     }, [])
 
+
+
     const getCart = () => {
-        const url = "cart/getByUser/" + 1
+
+        const url = "cart/getByUser/" + profile.User_Id
         request("GET", url, {}).then(res => {
             let data = res.data
             if (res.data.error === true) {
@@ -50,12 +53,13 @@ const CartShop = () => {
                     }
                 } else {
                     setMessage(err);
+                    alert(message)
 
                 }
             } else {
                 setCart(data.data)
                 setTotal(data.total)
-                setItemTotal(data.RecordNum)
+                setItemTotal(data.recordNum)
 
             }
 
@@ -68,10 +72,34 @@ const CartShop = () => {
         })
     }
 
+    function summitOrder() {
+        axios({
+            url: `http://localhost:8080/api/orderproduct`,
+            method: "POST",
+            data: {
+                User_Id: profile.User_Id,
+                Discount: 0,
+                order_status: 2,
+                payment_id: 2
+            },
+
+        }).then((res) => {
+            const error = res.data.error;
+            if (error) {
+                const message = error.message;
+                console.log(message); // Display the error in the console log
+                alert(message); // Display the error in an alert (if desired)
+            } else {
+                alert(res.data.message)
+                getCart()
+            }
+        });
+    }
+
     return (
         <Container fluid>
             <Row >
-                <Col className="bg-white h-100" sm={12} md={12} lg={12} xl={12} >
+                <Col className=" h-100" sm={12} md={12} lg={12} xl={12} >
                     <section className="h-100 gradient-custom">
                         <MDBContainer className="py-5 h-100">
                             <MDBRow className="justify-content-center my-4">
@@ -119,7 +147,7 @@ const CartShop = () => {
                                                                 </MDBCol>
 
                                                                 <MDBCol lg="4" md="6" className="mb-4 mb-lg-0">
-                                                                    <div className="d-flex mb-4" style={{ maxWidth: "300px" }}>
+                                                                    {/* <div className="d-flex mb-4" style={{ maxWidth: "300px" }}>
                                                                         <MDBBtn className="px-3 me-2" onClick={() => Qty > 1 ? setQty(Qty - 1) : null}>
                                                                             <MDBIcon fas icon="minus" />
                                                                         </MDBBtn>
@@ -128,7 +156,7 @@ const CartShop = () => {
                                                                         <MDBBtn className="px-3 ms-2" onClick={() => setQty(Qty + 1)}>
                                                                             <MDBIcon fas icon="plus" />
                                                                         </MDBBtn>
-                                                                    </div>
+                                                                    </div> */}
 
                                                                     <p className="text-start text-md-center">
                                                                         <strong>${(item.P_Price * item.Quantity)}</strong>
@@ -152,15 +180,6 @@ const CartShop = () => {
 
 
 
-                                    {/* no product place */}
-                                    <MDBCard className="mb-4">
-                                        <MDBCardBody>
-                                            <p>
-                                                <strong>Expected shipping delivery</strong>
-                                            </p>
-                                            <p className="mb-0">12.10.2020 - 14.10.2020</p>
-                                        </MDBCardBody>
-                                    </MDBCard>
 
                                     <MDBCard className="mb-4 mb-lg-0">
                                         <MDBCardBody>
@@ -194,8 +213,8 @@ const CartShop = () => {
                                             <MDBListGroup flush>
                                                 <MDBListGroupItem
                                                     className="d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                                                    Products
-                                                    <span>${Total}</span>
+                                                    Items
+                                                    <span>{ItemTotal} pcs</span>
                                                 </MDBListGroupItem>
                                                 <MDBListGroupItem className="d-flex justify-content-between align-items-center px-0">
                                                     Shipping
@@ -215,7 +234,9 @@ const CartShop = () => {
                                                 </MDBListGroupItem>
                                             </MDBListGroup>
 
-                                            <MDBBtn block size="lg" onClick={() => alert("Ready do it just call api to use and don't forget user_id is importan")}>
+                                            <MDBBtn block size="lg" onClick={() => {
+                                                summitOrder()
+                                            }}>
                                                 Go to checkout
                                             </MDBBtn>
                                         </MDBCardBody>

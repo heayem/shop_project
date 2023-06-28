@@ -69,7 +69,7 @@ const GetAll = (req, res) => {
             })
         } else {
             db.query("SELECT count(Id) AS total FROM cart", (err, row1) => {
-                let total = row1[0].total
+                let total = row1[0]?.total
                 if (err) {
                     res.json({
                         error: true,
@@ -142,17 +142,19 @@ const GetByUer = (req, res) => {
                 message: err
             })
         } else {
-            let sql1 = "SELECT SUM(p.P_Price * c.Quantity) AS total FROM cart c"
+            let sql1 = "SELECT SUM(p.P_Price * c.Quantity) AS total,COUNT(c.User_Id) AS recordNum FROM cart c"
                 + " INNER JOIN user u ON u.User_Id = c.User_Id "
                 + " INNER JOIN product p ON c.Product_Id = p.P_Id "
                 + " INNER JOIN category cate ON cate.C_Id = p.Category_Id "
                 + " WHERE c.User_Id=?"
             db.query(sql1, [id], (err1, row1) => {
-                var total = row1[0].total
+                var total = row1[0]?.total
+                var recordNum = row1[0]?.recordNum
                 if (!err1) {
                     res.json({
                         data: row,
-                        total: total
+                        total: total,
+                        recordNum: recordNum
                     })
                 } else {
                     res.json({

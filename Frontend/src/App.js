@@ -80,7 +80,7 @@ function App() {
                     <Navclient />
                   }
 
-                  <div className={
+                  <div style={{ backgroundColor: "#eee" }} className={
                     // d-flex flex-row m-auto justify-content-center
                     menu === true ? 'col-10 m-auto  p-0 m-0 menu  overflow-auto'
                       : 'col-11 m-auto p-0 m-0 menu  overflow-auto'
@@ -104,6 +104,7 @@ function App() {
                             <Route path='/CartShop/:P_Id' element={<CartShop />} />
                             <Route path='/CartShop' element={<CartShop />} />
                             <Route path='/Detail/:id' element={<Detail />} />
+                            <Route path='/Detail' element={<Detail />} />
                           </Routes>
                           :
                           <Routes>
@@ -117,7 +118,7 @@ function App() {
                 :
                 <>
                   <Navclient />
-                  <div className='col-11 m-auto p-0 m-0 menu  overflow-auto'>
+                  <div style={{ backgroundColor: "#eee" }} className='col-11 m-auto p-0 m-0 menu  overflow-auto'>
                     <Routes>
                       <Route path='/' element={<Home />} />
                       <Route path='/Detail/:id' element={<Detail />} />
