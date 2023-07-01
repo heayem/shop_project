@@ -39,7 +39,7 @@ const CreateUser = (req, res) => {
 
     password = bcrypt.hashSync(password, 10)
     // $2b$10$crnCIVwYpjPs7IWETci1QO/f76BT5lFdoKTKV5ndDolnrChArvMe.
-    db.query("SELECT * FROM user WHERE Email=? ", [body.Email], (err1, row1) => {
+    db.query("SELECT * FROM user WHERE Email = ? OR Tel = ? ", [body.Email, body.Tel], (err1, row1) => {
         if (err1) {
             res.json({
                 error: true,
@@ -97,10 +97,22 @@ const CreateUser = (req, res) => {
 
                 })
             } else {
-                res.json({
-                    error: true,
-                    message: "user already exist",
-                })
+                if (row1[0].Tel == body.Tel) {
+                    res.json({
+                        error: true,
+                        message: "Your telephone number have already exist  ",
+                    })
+                    return false
+
+                }
+                if (row1[0].Email = body.Email) {
+                    res.json({
+                        error: true,
+                        message: "Your Email have already exis",
+                    })
+                    return false
+                }
+
             }
         }
     })

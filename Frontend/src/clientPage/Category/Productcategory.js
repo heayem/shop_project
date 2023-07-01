@@ -17,7 +17,7 @@ import {
 import axios from "axios";
 import Footer from "../../Component/Footer/footer.compo";
 
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const Productcategory = () => {
     const [category, setCatgory] = useState([])
@@ -97,7 +97,7 @@ const Productcategory = () => {
                                                 <span className="text-danger m-0 p-0">{item.P_Name} $ </span>
                                                 {item.P_Description.substr(0, 150) + "..."}
                                             </MDBCardText>
-                                            <MDBBtn href='#'>view detail</MDBBtn>
+                                            <Link className="w-100" to={'/Detail/' + item.P_Id}> <MDBBtn color="primary" className="w-100">view detail </MDBBtn></Link>
                                         </MDBCardBody>
                                     </MDBCard>
                                 </Col>

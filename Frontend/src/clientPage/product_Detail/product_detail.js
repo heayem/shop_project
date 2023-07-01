@@ -123,7 +123,7 @@ function Detail() {
                                         </Link>
 
                                         <MDBBtn
-                                            outline color="primary"
+                                            color="primary"
                                             size="sm"
                                             className="mt-2"
                                             onClick={() => {

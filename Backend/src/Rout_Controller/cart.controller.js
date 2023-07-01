@@ -1,4 +1,7 @@
 const db = require('../db.configer/db.configer')
+const jwt = require('jsonwebtoken')
+const dotenv = require('dotenv')
+dotenv.config()
 
 
 const Create = (req, res) => {
@@ -98,14 +101,14 @@ const GetAll = (req, res) => {
 }
 const GetByone = (req, res) => {
     const id = req.params.P_Id
-    if (!id) {
+    if (!id || id == "" || id == undefined) {
         res.json({
             error: true,
             message: "require id "
         })
     }
 
-    let = sql = "SELECT * FROM cart WHERE Id=?"
+    let = sql = "SELECT * FROM cart WHERE User_Id=?"
     db.query(sql, [id], (err, row) => {
         if (err) {
             res.json({
@@ -121,51 +124,76 @@ const GetByone = (req, res) => {
 
 }
 const GetByUer = (req, res) => {
-    const id = req.params.User_Id
-    if (!id) {
-        res.json({
-            error: true,
-            message: "require user_id "
-        })
-    }
-    let sql = "SELECT c.*,p.P_Name,u.User_Name,p.P_Price,cate.C_Name,p.Images,DATE_FORMAT(c.Create_at,'%d/%m/%Y %h:%i %p') AS Create_at FROM cart c"
-        + " INNER JOIN user u ON u.User_Id = c.User_Id "
-        + " INNER JOIN product p ON c.Product_Id = p.P_Id "
-        + " INNER JOIN category cate ON cate.C_Id = p.Category_Id "
-        + " WHERE c.User_Id=?"
 
-    db.query(sql, [id], (err, row) => {
+    var id
+    var authHeader = req.headers["authorization"]
+    if (authHeader) {
+        authHeader = authHeader.split(" ");
+        var token = authHeader[1]
 
-        if (err) {
-            res.json({
-                error: true,
-                message: err
-            })
+        if (token == null) {
+            return res.sendStatus(401)
         } else {
-            let sql1 = "SELECT SUM(p.P_Price * c.Quantity) AS total,COUNT(c.User_Id) AS recordNum FROM cart c"
-                + " INNER JOIN user u ON u.User_Id = c.User_Id "
-                + " INNER JOIN product p ON c.Product_Id = p.P_Id "
-                + " INNER JOIN category cate ON cate.C_Id = p.Category_Id "
-                + " WHERE c.User_Id=?"
-            db.query(sql1, [id], (err1, row1) => {
-                var total = row1[0]?.total
-                var recordNum = row1[0]?.recordNum
-                if (!err1) {
-                    res.json({
-                        data: row,
-                        total: total,
-                        recordNum: recordNum
-                    })
+            jwt.verify(token, process.env.ACCES_TOKEN, (err, user) => {
+                if (err) {
+                    return res.sendStatus(403);
                 } else {
-                    res.json({
-                        error: true,
-                        message: err
-                    })
-                }
-            })
+                    id = req.user = user.user.User_Id
 
+                    if (!id) {
+                        res.json({
+                            error: true,
+                            message: "require user_id "
+                        })
+                    }
+                    let sql = "SELECT c.*,p.P_Name,u.User_Name,p.P_Price,cate.C_Name,p.Images,DATE_FORMAT(c.Create_at,'%d/%m/%Y %h:%i %p') AS Create_at FROM cart c"
+                        + " INNER JOIN user u ON u.User_Id = c.User_Id "
+                        + " INNER JOIN product p ON c.Product_Id = p.P_Id "
+                        + " INNER JOIN category cate ON cate.C_Id = p.Category_Id "
+                        + " WHERE c.User_Id=?"
+
+                    db.query(sql, [id], (err, row) => {
+
+                        if (err) {
+                            res.json({
+                                error: true,
+                                message: err
+                            })
+                        } else {
+                            let sql1 = "SELECT SUM(p.P_Price * c.Quantity) AS total,COUNT(c.User_Id) AS recordNum FROM cart c"
+                                + " INNER JOIN user u ON u.User_Id = c.User_Id "
+                                + " INNER JOIN product p ON c.Product_Id = p.P_Id "
+                                + " INNER JOIN category cate ON cate.C_Id = p.Category_Id "
+                                + " WHERE c.User_Id=?"
+                            db.query(sql1, [id], (err1, row1) => {
+                                var total = row1[0]?.total
+                                var recordNum = row1[0]?.recordNum
+                                if (!err1) {
+                                    res.json({
+                                        data: row,
+                                        total: total,
+                                        recordNum: recordNum
+                                    })
+                                } else {
+                                    res.json({
+                                        error: true,
+                                        message: err
+                                    })
+                                }
+                            })
+
+                        }
+                    })
+
+                }
+
+
+            })
         }
-    })
+
+
+    }
+
 
 }
 

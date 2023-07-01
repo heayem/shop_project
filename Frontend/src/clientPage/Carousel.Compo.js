@@ -23,28 +23,21 @@ const Slider = () => {
         })
     }
 
-    var i = 1
-    function Slideindex(i, row) {
-        if (i > row.length) {
-            i = 1
-        } else {
-            i++
-        }
-        return i
-    }
-
     return (
         <>
-            {/* {slide != null &&
+            {slide != null &&
                 <>
                     {slide.map((row, index) => {
                         return (
-                            <MDBCarousel showControls fade className='bg-image hover-zoom'>
+                            <MDBCarousel showControls showIndicators className='bg-image hover-zoom'>
                                 <MDBCarouselItem
+                                    key={index}
                                     className=" object-fit: cover d-block w-100"
-                                    itemId={index}
+                                    itemId={row.rank}
+                                    height={300}
                                     src={`http://localhost/Images/${row.Images}`}
                                     alt="..."
+
                                 >
                                     <h5>{row.P_Name}</h5>
                                 </MDBCarouselItem>
@@ -53,7 +46,7 @@ const Slider = () => {
                     })
 
                     }
-                </>} */}
+                </>}
         </>
     );
 }

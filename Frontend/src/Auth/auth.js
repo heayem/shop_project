@@ -21,12 +21,13 @@ const Login = () => {
         setShow(false)
     }
 
-    const login = (e) => {
-        e.preventDefault()
+    const login = () => {
+        // e.preventDefault()
         setLoading(true)
         axios({
             url: "http://localhost:8080/api/login",
             data: {
+                Tel: email,
                 email: email,
                 Password: password
             },
@@ -42,14 +43,15 @@ const Login = () => {
                 const role = res.data.role[0].Role_Id
                 localStorage.setItem("profile", JSON.stringify(profile))
                 localStorage.setItem("role", role)
+                localStorage.setItem('token', res.data.acc_token)
                 localStorage.setItem("login", 1)
                 clearForm()
                 window.location = ("/")
             }
         })
     }
-    const register = (e) => {
-        e.preventDefault()
+    const register = () => {
+        // e.preventDefault()
         axios({
             url: "http://localhost:8080/api/user",
             data: {
@@ -118,7 +120,7 @@ const Login = () => {
                                             <Form.Label>Email address</Form.Label>
                                             <Form.Control
                                                 onChange={(e) => setEmail(e.target.value)}
-                                                type="email"
+                                                type="text"
                                                 placeholder="Enter email" />
                                         </Form.Group>
                                         <Form.Group className="mb-3" controlId="formBasicPwd">
@@ -130,10 +132,11 @@ const Login = () => {
                                         </Form.Group>
                                         <Form.Group>
                                             <Button
-                                                // onClick={login}
+                                                onClick={login}
                                                 className="w-100"
                                                 variant="primary"
-                                                type="submit">
+                                            // type="submit"
+                                            >
                                                 Login
                                             </Button>
                                         </Form.Group>
@@ -172,10 +175,11 @@ const Login = () => {
                                         </Form.Group>
                                         <Form.Group>
                                             <Button
-                                                // onClick={register}
+                                                onClick={register}
                                                 className="w-100"
                                                 variant="primary"
-                                                type="submit">
+                                            // type="submit"
+                                            >
                                                 Register
                                             </Button>
                                         </Form.Group>

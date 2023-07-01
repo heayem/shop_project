@@ -5,7 +5,7 @@ import {
     Spinner,
     NavLink
 } from "react-bootstrap"
-// import Slider from "./Carousel.Compo"
+import Slider from "../Carousel.Compo";
 import React, { useEffect, useState } from 'react';
 import {
     MDBCard,
@@ -139,7 +139,7 @@ const Home = () => {
                                 </Col>
                             </Col>
                             <Col className="mb-5  mt-5" sm={6} md={6} lg={6} xl={6}>
-                                {/* <Slider /> */}
+                                <Slider />
                             </Col>
                         </Row>
                     </Col>

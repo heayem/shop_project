@@ -1,6 +1,7 @@
 import axios from "axios"
 
 const baseUrl = "http://localhost:8080/api/"
+const token = localStorage.getItem("token")
 
 export const request = (method = "", url = "", data = {}) => {
     // var token = "dafsdjoeijflksjeDFASFDf"
@@ -8,7 +9,11 @@ export const request = (method = "", url = "", data = {}) => {
         url: baseUrl + url,
         method: method,
         data: data,
-        headers: { 'Content-type': 'multipart/form-data' },
+        headers: {
+            'Content-type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`
+
+        },
     }).then(res => {
         return res
     }).catch(err => {
@@ -19,3 +24,4 @@ export const request = (method = "", url = "", data = {}) => {
         return false
     })
 }
+

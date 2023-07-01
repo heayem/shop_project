@@ -145,7 +145,7 @@ const getAll_Product = (req, res) => {
 
     db.query(sql, (err, row) => {
         db.query(sql1, (err1, row1) => {
-            let total = row1[0].total
+            var total = row1[0]?.total
             if (err) {
                 res.json({
                     message: err.sqlMessage,
@@ -194,9 +194,18 @@ const randomCartClient = (req, res) => {
 }
 
 const Slide = (req, res) => {
-    var sql = "SELECT p.*,c.C_Name category FROM product p"
-    sql += " INNER JOIN category c ON p.Category_Id = c.C_Id "
-    sql += " WHERE p.Images IS NOT NULL AND p.Images != ''"
+
+    // var sql = "SELECT @rank:=@rank+1 AS rankp.*,c.C_Name category FROM product p"
+    // sql += " INNER JOIN category c ON p.Category_Id = c.C_Id "
+    // sql += " WHERE p.Images IS NOT NULL AND p.Images != ''"
+
+    var rank = 0;
+    var sql = `SELECT (@rank := @rank + 1) AS rank, p.*, c.C_Name AS category FROM product p
+           INNER JOIN category c ON p.Category_Id = c.C_Id,
+           (SELECT @rank := ${rank}) AS r
+           WHERE p.Images IS NOT NULL AND p.Images <> ''
+           ORDER BY rank ASC`;
+
     db.query(sql, (err, row) => {
         if (err) {
             res.json({

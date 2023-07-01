@@ -30,9 +30,7 @@ const CartShop = () => {
     const [cart, setCart] = useState()
     const [Total, setTotal] = useState()
     const [ItemTotal, setItemTotal] = useState()
-    // const [User_Id, setUser_Id] = useState()
-    // const [Qty, setQty] = useState(2)
-    const profile = JSON.parse(localStorage.getItem("profile"))
+    const token = localStorage.getItem("token")
 
     useEffect(() => {
         getCart()
@@ -42,7 +40,7 @@ const CartShop = () => {
 
     const getCart = () => {
 
-        const url = "cart/getByUser/" + profile.User_Id
+        const url = "cart/getByUser"
         request("GET", url, {}).then(res => {
             let data = res.data
             if (res.data.error === true) {
@@ -76,8 +74,11 @@ const CartShop = () => {
         axios({
             url: `http://localhost:8080/api/orderproduct`,
             method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`
+
+            },
             data: {
-                User_Id: profile.User_Id,
                 Discount: 0,
                 order_status: 2,
                 payment_id: 2
